@@ -23,14 +23,11 @@ git clone https://github.com/musaubrian/rgn.git
 
 git clone git@github.com:musaubrian/rgn.git
 ```
-2. Change into the RepoGen directory:
-
-```bash
-cd RepoGen
-```
 3. Build the RepoGen binary:
 
 ```bash
+cd rgn
+
 go build
 ```
 4. Move the binary to a directory in your system's PATH (e.g., /usr/local/bin)
