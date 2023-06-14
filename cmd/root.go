@@ -22,8 +22,6 @@ var rootCmd = &cobra.Command{
 	Long: `repoGen(rgn) gives you the ability to create repositories
 on your github account from the command line.
 
-You can configure the way you want the repo to be.
-run: rgn create --help for more information
     `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
