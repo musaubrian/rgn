@@ -49,3 +49,9 @@ func GetGitignoreErr(err error) error {
 	e := errors.Join(getIgnoreErr, err)
 	return e
 }
+
+func GetIssuesErr(err error) error {
+	getIssuesErr := errors.New("Could not get your issues\n")
+	e := errors.Join(getIssuesErr, err)
+	return e
+}
