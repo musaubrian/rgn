@@ -23,6 +23,15 @@ func Auth(envPath string, c context.Context) (*github.Client, error) {
 		}
 		os.Exit(1)
 	}
+	if len(envDets) != 2 {
+		log.Println("It seems your .env is empty\nLet's fix that")
+		err := utils.CreateEnv(envPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(1)
+
+	}
 	tkn = strings.Split(envDets[1], "=")
 
 	ts := oauth2.StaticTokenSource(
