@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/cheynewallace/tabby"
@@ -13,45 +14,56 @@ import (
 // issuesCmd represents the issues command
 var issuesCmd = &cobra.Command{
 	Use:   "issues",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "List issues related to the user",
+	/* Long: `A longer description that spans multiple lines and likely contains examples
+	and usage of using your command. For example:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Cobra is a CLI library for Go that empowers applications.
+	This application is a tool to generate the needed files
+	to quickly create a Cobra application.`, */
+
+	Aliases: []string{"i"},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("RUN: rgn issues --help for more information")
 	},
 }
 
 var assignIssues = &cobra.Command{
-	Use:  "assigned",
-	Long: "",
+	Use:   "assigned",
+	Short: "List all open issues assigned to you",
+	Long: `List all open issues assigned to you
+Response includes any labels available`,
 	Run: func(cmd *cobra.Command, args []string) {
 		t := tabby.New()
-		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "ASSIGNEES", "LOCKED", "CREATED_AT")
+		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
 		issues, err := gh.GetIssuesAssigned(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
 		count := 0
 		for _, i := range issues {
-			for _, a := range i.Assignees {
-				if len(i.Labels) > 0 {
-					for _, l := range i.Labels {
-						timePassed := time.Since(*i.CreatedAt)
-						relativeTime := timePassed.String() + " ago"
-						t.AddLine(count, *i.Repository.FullName, *i.Title, *i.Body, *l.Name, *a.Login, *i.Locked, relativeTime)
-						count += 1
-					}
-				} else {
+			b := strings.Split(*i.Body, "\r\n")
+			body := b[0]
 
-					timePassed := time.Since(*i.CreatedAt)
-					relativeTime := timePassed.String() + " ago"
-					t.AddLine(count, *i.Repository.FullName, *i.Title, *i.Body, "--none--", *a.Login, *i.Locked, relativeTime)
-					count += 1
+			// only when there was more than one line
+			if len(b) > 1 {
+				body = body + "..."
+			}
+			timePassed := time.Since(*i.CreatedAt)
+			relativeTime := timePassed.String() + " ago"
+
+			if len(i.Labels) > 0 {
+				l := *i.Labels[0].Name
+
+				if len(i.Labels) > 1 {
+					l = l + "..."
 				}
+
+				t.AddLine(count, *i.Repository.FullName, *i.Title, body, l, relativeTime)
+				count += 1
+			} else {
+				t.AddLine(count, *i.Repository.FullName, *i.Title, body, "--none--", relativeTime)
+				count += 1
 			}
 		}
 		t.Print()
