@@ -4,13 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/musaubrian/rgn/custom"
 )
 
 func ReadEnv(envPath string) ([]string, error) {
 	var ghDets []string
 	envFile, err := os.Open(envPath)
 	if err != nil {
-		return ghDets, err
+		return ghDets, custom.NoneExistentEnvErr()
 	}
 	defer envFile.Close()
 
@@ -27,7 +29,7 @@ func CreateEnv(envPath string) error {
 
 	env, err := os.Create(envPath)
 	if err != nil {
-		return err
+		return custom.EnvCreationErr(err)
 	}
 	defer env.Close()
 	fmt.Println("// Let's set you up")

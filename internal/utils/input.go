@@ -2,10 +2,11 @@ package utils
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/musaubrian/rgn/custom"
 )
 
 func ReadInput(prompt string) (string, error) {
@@ -17,12 +18,12 @@ func ReadInput(prompt string) (string, error) {
 	s, err = rd.ReadString('\n')
 
 	if err != nil {
-		return s, err
+		return s, custom.ReadInputErr()
 	}
 
 	s = strings.TrimSuffix(s, "\n")
 	if len(s) < 1 {
-		return s, errors.New("No input entered")
+		return s, custom.EmptyInputReadErr()
 	}
 
 	return s, nil

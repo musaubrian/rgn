@@ -2,10 +2,10 @@ package gh
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/google/go-github/github"
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -14,7 +14,7 @@ import (
 func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository, error) {
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return nil, err
+		return nil, custom.GetGHUserErr(err)
 	}
 
 	// Repo name must not be empty
@@ -41,7 +41,7 @@ func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository,
 
 	repo, _, err := c.Repositories.Create(ctx, "", &rOpts)
 	if err != nil {
-		return repo, err
+		return repo, custom.CreateRepoErr(err)
 	}
 	return repo, nil
 }
@@ -109,7 +109,7 @@ func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) e
 
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return errors.New("Could not get the User")
+		return custom.GetGHUserErr(err)
 	}
 
 	a := github.CommitAuthor{
@@ -127,16 +127,16 @@ func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) e
 	}
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, *r.Name, "README.md", &fOpts)
 	if err != nil {
-		err = errors.Join(errors.New("README creation Failed"), err)
+		return custom.FileCreationErr("README.md", err)
 	}
-	return err
+	return nil
 }
 
 func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository, lang string) error {
 	commitMsg := "chore: create .gitignore"
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return errors.New("Could not get User")
+		return custom.GetGHUserErr(err)
 	}
 	gitIgnoreContent, err := GetGitignore(c, ctx, lang)
 	if err != nil {
@@ -159,7 +159,7 @@ func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository
 	}
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, *r.Name, ".gitignore", &fOpts)
 	if err != nil {
-		return err
+		return custom.FileCreationErr(".gitignore", err)
 	}
 	return nil
 }
@@ -167,7 +167,7 @@ func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository
 func GetGitignore(c *github.Client, ctx context.Context, lang string) (string, error) {
 	gitIgnore, _, err := c.Gitignores.Get(ctx, lang)
 	if err != nil {
-		return "", err
+		return "", custom.GetGitignoreErr(err)
 	}
-	return gitIgnore.String(), err
+	return gitIgnore.String(), nil
 }

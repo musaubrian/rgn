@@ -11,23 +11,41 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// repoCmd represents the repo command
-var repoCmd = &cobra.Command{
-	Use:   "repo",
-	Short: "Create a new empty repo",
-	Long: `Create a new empty repo (no README or .gitignore)
+// createCmd represents the create command
+var createCmd = &cobra.Command{
+	Use:   "create",
+	Short: "Create a new repo",
+	Long: `Create a new repository with the specified configurations
 It displays the URLs you can use to clone it(SSH and HTTPS) when done
 
-You can also configure it to some level:
+Available configurations:
 - Completely bare-bones(no README or .gitignore)
-    run: rgn repo --help for more information
+    run: rgn create --help for more information
 - Just a README.
-    run: rgn repo r --help for more information
+    run: rgn create r --help for more information
 - Just a .gitignore of the specified language
-    run: rgn repo i --help for more information
+    run: rgn create i --help for more information
 - Full.
-    run: rgn repo a --help for more information
+    run: rgn create a --help for more information
 `,
+	Run: func(cmd *cobra.Command, args []string) {
+		r, err := gh.CreateEmptyRepo(Client, cmd.Context())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Printf("// Created %s successfully\n", *r.Name)
+		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+	},
+}
+
+var emptyRepo = &cobra.Command{
+	Use:   "empty",
+	Short: "Create a new empty repo",
+	Long: `
+Creates a new repository that is completely empty
+No README or .gitignore`,
+	Aliases: []string{"e"},
 	Run: func(cmd *cobra.Command, args []string) {
 		r, err := gh.CreateEmptyRepo(Client, cmd.Context())
 		if err != nil {
@@ -97,18 +115,18 @@ var readmeAndGitignore = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(repoCmd)
-	repoCmd.AddCommand(withGitignore)
-	repoCmd.AddCommand(withReadme)
-	repoCmd.AddCommand(readmeAndGitignore)
-
+	rootCmd.AddCommand(createCmd)
+	createCmd.AddCommand(emptyRepo)
+	createCmd.AddCommand(withGitignore)
+	createCmd.AddCommand(withReadme)
+	createCmd.AddCommand(readmeAndGitignore)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// repoCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// createCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// repoCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

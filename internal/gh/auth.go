@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/google/go-github/github"
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/utils"
 	"golang.org/x/oauth2"
 )
@@ -24,7 +25,7 @@ func Auth(envPath string, c context.Context) (*github.Client, error) {
 		os.Exit(1)
 	}
 	if len(envDets) != 2 {
-		log.Println("It seems your .env is empty\nLet's fix that")
+		log.Println(custom.EmptyEnvErr())
 		err := utils.CreateEnv(envPath)
 		if err != nil {
 			log.Fatal(err)

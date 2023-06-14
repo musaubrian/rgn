@@ -3,7 +3,7 @@
 RepoGen is a lightweight command-line interface (CLI) tool written in Go,
 designed to simplify the process of creating and initializing repositories on GitHub.
 
-It offers a different approach to repository creation by providing options to generate repositories:
+It offers a **simpler* approach to repository creation by providing options to generate repositories:
  - Empty repostitores(**no README or .gitignore**)
  - repositories with only a .gitignore file,
  - repositories with only a README file,
@@ -30,7 +30,8 @@ cd rgn
 
 go build
 ```
-4. Move the binary to a directory in your system's PATH (e.g., /usr/local/bin)
+4.
+   a) Move the binary to a directory in your system's PATH (e.g., /usr/local/bin)
 or add the current directory to your PATH environment variable.
  OR just run the generated executable
  ```bash
@@ -39,6 +40,12 @@ or add the current directory to your PATH environment variable.
  # Windows
 
  ./rgn.exe
+ ```
+   b) Install it system wide using `make`
+ ```bash
+ make install
+
+ rgn
  ```
 
 6. Once you've completed the installation, you can start using RepoGen right away.
