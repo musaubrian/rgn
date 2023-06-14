@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Client *github.Client
+var client *github.Client
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 on your github account from the command line.
 
 You can configure the way you want the repo to be.
-run: rgn repo --help for more information
+run: rgn create --help for more information
     `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -37,7 +37,7 @@ func Execute() {
 	ctx := context.Background()
 	rootCmd.SetContext(ctx)
 
-	Client, err = gh.Auth(".env", rootCmd.Context())
+	client, err = gh.Auth(".env", rootCmd.Context())
 	if err != nil {
 		log.Fatal(err)
 	}

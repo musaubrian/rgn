@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/spf13/cobra"
 )
@@ -15,12 +16,13 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new repo",
-	Long: `Create a new repository with the specified configurations
+	Long: `
+Create a new repository with the specified configurations
 It displays the URLs you can use to clone it(SSH and HTTPS) when done
 
 Available configurations:
 - Completely bare-bones(no README or .gitignore)
-    run: rgn create --help for more information
+    run: rgn create e --help for more information
 - Just a README.
     run: rgn create r --help for more information
 - Just a .gitignore of the specified language
@@ -29,13 +31,8 @@ Available configurations:
     run: rgn create a --help for more information
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		r, err := gh.CreateEmptyRepo(Client, cmd.Context())
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		fmt.Printf("// Created %s successfully\n", *r.Name)
-		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+		usage := "Run: rgn create --help for more information"
+		fmt.Println(usage)
 	},
 }
 
@@ -47,13 +44,13 @@ Creates a new repository that is completely empty
 No README or .gitignore`,
 	Aliases: []string{"e"},
 	Run: func(cmd *cobra.Command, args []string) {
-		r, err := gh.CreateEmptyRepo(Client, cmd.Context())
+		custom.HeaderMsg("Creating an empty repo")
+		r, err := gh.CreateEmptyRepo(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("// Created %s successfully\n", *r.Name)
-		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
@@ -67,18 +64,18 @@ It displays the URLs you can use to clone it(SSH and HTTPS)
 `,
 	Aliases: []string{"i"},
 	Run: func(cmd *cobra.Command, args []string) {
-		r, err := gh.CreateRepoWithGitignore(Client, cmd.Context())
+		custom.HeaderMsg("Creating repo with gitignore")
+		r, err := gh.CreateRepoWithGitignore(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("// Created %s successfully\n", *r.Name)
-		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
 var withReadme = &cobra.Command{
 	Use:   "readme",
-	Short: "Create a github repo with only a Readme.md",
+	Short: "Create a github repo with only a README",
 	Long: `
 Create a repository with only a README.md
 The README.md contains the repository name and the description
@@ -91,12 +88,12 @@ The README.md contains the repository name and the description
 `,
 	Aliases: []string{"r"},
 	Run: func(cmd *cobra.Command, args []string) {
-		r, err := gh.CreateRepoWithReadme(Client, cmd.Context())
+		custom.HeaderMsg("Creating repo with README")
+		r, err := gh.CreateRepoWithReadme(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("// Created %s successfully\n", *r.Name)
-		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
@@ -105,12 +102,12 @@ var readmeAndGitignore = &cobra.Command{
 	Short:   "Create a github repo with both a README and .gitignore",
 	Aliases: []string{"a"},
 	Run: func(cmd *cobra.Command, args []string) {
-		r, err := gh.CreateRepoWithBoth(Client, cmd.Context())
+		custom.HeaderMsg("Creating repo with README & .gitignore")
+		r, err := gh.CreateRepoWithBoth(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("// Created %s successfully\n", *r.Name)
-		fmt.Printf("Cloning URLs\nssh: %s\nhttps: %s", *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
