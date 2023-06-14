@@ -19,12 +19,3 @@ func GetIssuesAssigned(c *github.Client, ctx context.Context) ([]*github.Issue, 
 	}
 	return i, nil
 }
-
-// func PrettyAlignIssues(issues []*github.Issue)[][]string {
-//     var finalIssueLists [][]string
-//     var singleIssueList []string
-//     for _, i := range issues {
-//         singleIssueList = append(singleIssueList, *i.Title, i.)
-//
-//     }
-// }

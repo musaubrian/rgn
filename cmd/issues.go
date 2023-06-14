@@ -37,11 +37,19 @@ var assignIssues = &cobra.Command{
 		}
 		count := 0
 		for _, i := range issues {
-			for _, l := range i.Labels {
-				for _, a := range i.Assignees {
+			for _, a := range i.Assignees {
+				if len(i.Labels) > 0 {
+					for _, l := range i.Labels {
+						timePassed := time.Since(*i.CreatedAt)
+						relativeTime := timePassed.String() + " ago"
+						t.AddLine(count, *i.Repository.FullName, *i.Title, *i.Body, *l.Name, *a.Login, *i.Locked, relativeTime)
+						count += 1
+					}
+				} else {
+
 					timePassed := time.Since(*i.CreatedAt)
 					relativeTime := timePassed.String() + " ago"
-					t.AddLine(count, *i.Repository.FullName, *i.Title, *i.Body, *l.Name, *a.Login, *i.Locked, relativeTime)
+					t.AddLine(count, *i.Repository.FullName, *i.Title, *i.Body, "--none--", *a.Login, *i.Locked, relativeTime)
 					count += 1
 				}
 			}
