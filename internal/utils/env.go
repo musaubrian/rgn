@@ -27,6 +27,10 @@ func ReadEnv(envPath string) ([]string, error) {
 func CreateEnv(envPath string) error {
 	var envDets []string
 
+	err := createEnvDir()
+	if err != nil {
+		return err
+	}
 	env, err := os.Create(envPath)
 	if err != nil {
 		return custom.EnvCreationErr(err)
@@ -53,4 +57,26 @@ func CreateEnv(envPath string) error {
 	fmt.Println("// All set, re-run to access the commands")
 
 	return nil
+}
+
+func createEnvDir() error {
+	h, err := os.UserHomeDir()
+	if err != nil {
+		return custom.GetHomeErr(err)
+	}
+	envDir := h + string(os.PathSeparator) + ".rgn"
+	err = os.Mkdir(envDir, 0o770)
+	if err != nil {
+		return custom.DirCreationErr(err)
+	}
+	return nil
+}
+
+func GetEnvLoc() (string, error) {
+	h, err := os.UserHomeDir()
+	if err != nil {
+		return "", custom.GetHomeErr(err)
+	}
+	envLoc := h + string(os.PathSeparator) + ".rgn" + string(os.PathSeparator) + ".env"
+	return envLoc, nil
 }

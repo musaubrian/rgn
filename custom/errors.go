@@ -55,3 +55,15 @@ func GetIssuesErr(err error) error {
 	e := errors.Join(getIssuesErr, err)
 	return e
 }
+
+func DirCreationErr(err error) error {
+	dirCreationErr := errors.New("Could not create .rgn\n")
+	e := errors.Join(dirCreationErr, err)
+	return e
+}
+
+func GetHomeErr(err error) error {
+	getHomeErr := errors.New("HOME DIR SHOULD EXIST\n")
+	e := errors.Join(getHomeErr, err)
+	return e
+}

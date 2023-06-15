@@ -10,6 +10,7 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/musaubrian/rgn/internal/gh"
+	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -35,8 +36,12 @@ func Execute() {
 	var err error
 	ctx := context.Background()
 	rootCmd.SetContext(ctx)
+	env, err := utils.GetEnvLoc()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	client, err = gh.Auth(".env", rootCmd.Context())
+	client, err = gh.Auth(env, rootCmd.Context())
 	if err != nil {
 		log.Fatal(err)
 	}
