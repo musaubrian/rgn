@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -14,25 +13,10 @@ import (
 // issuesCmd represents the issues command
 var issuesCmd = &cobra.Command{
 	Use:   "issues",
-	Short: "List issues related to the user",
-	/* Long: `A longer description that spans multiple lines and likely contains examples
-	and usage of using your command. For example:
-
-	Cobra is a CLI library for Go that empowers applications.
-	This application is a tool to generate the needed files
-	to quickly create a Cobra application.`, */
-
-	Aliases: []string{"i"},
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("RUN: rgn issues --help for more information")
-	},
-}
-
-var assignIssues = &cobra.Command{
-	Use:   "assigned",
 	Short: "List all open issues assigned to you",
 	Long: `List all open issues assigned to you
 Response includes any labels available`,
+	Aliases: []string{"i"},
 	Run: func(cmd *cobra.Command, args []string) {
 		t := tabby.New()
 		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
@@ -72,7 +56,6 @@ Response includes any labels available`,
 
 func init() {
 	rootCmd.AddCommand(issuesCmd)
-	issuesCmd.AddCommand(assignIssues)
 
 	// Here you will define your flags and configuration settings.
 
