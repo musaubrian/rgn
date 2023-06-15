@@ -30,6 +30,7 @@ Available configurations:
 - Full.
     run: rgn create a --help for more information
 `,
+	Aliases: []string{"c"},
 	Run: func(cmd *cobra.Command, args []string) {
 		usage := "Run: rgn create --help for more information"
 		fmt.Println(usage)

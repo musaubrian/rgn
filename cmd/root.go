@@ -21,6 +21,7 @@ var rootCmd = &cobra.Command{
 	Short: "A lightweight version of Github CLI",
 	Long: `repoGen(rgn) gives you the ability to create repositories
 on your github account from the command line.
+It also provides a central point to see issues assigned to you
 
     `,
 	// Uncomment the following line if your bare application
