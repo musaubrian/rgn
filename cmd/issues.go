@@ -7,6 +7,7 @@ import (
 
 	"github.com/cheynewallace/tabby"
 	"github.com/musaubrian/rgn/internal/gh"
+	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -28,13 +29,13 @@ Response includes any labels available`,
 		for _, i := range issues {
 			b := strings.Split(*i.Body, "\r\n")
 			body := b[0]
-
 			// only when there was more than one line
 			if len(b) > 1 {
 				body = body + "..."
 			}
+
 			timePassed := time.Since(*i.CreatedAt)
-			relativeTime := timePassed.String() + " ago"
+			relativeTime := utils.TimeInDays(timePassed) + " ago"
 
 			if len(i.Labels) > 0 {
 				l := *i.Labels[0].Name
