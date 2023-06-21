@@ -169,5 +169,5 @@ func GetGitignore(c *github.Client, ctx context.Context, lang string) (string, e
 	if err != nil {
 		return "", custom.GetGitignoreErr(err)
 	}
-	return gitIgnore.String(), nil
+	return *gitIgnore.Source, nil
 }
