@@ -4,7 +4,6 @@ Copyright © 2023 musaubrian
 package cmd
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/musaubrian/rgn/custom"
@@ -19,22 +18,8 @@ var createCmd = &cobra.Command{
 	Long: `
 Create a new repository with the specified configurations
 It displays the URLs you can use to clone it(SSH and HTTPS) when done
-
-Available configurations:
-- Completely bare-bones(no README or .gitignore)
-    run: rgn create e --help for more information
-- Just a README.
-    run: rgn create r --help for more information
-- Just a .gitignore of the specified language
-    run: rgn create i --help for more information
-- Full.
-    run: rgn create a --help for more information
 `,
 	Aliases: []string{"c"},
-	Run: func(cmd *cobra.Command, args []string) {
-		usage := "Run: rgn create --help for more information"
-		fmt.Println(usage)
-	},
 }
 
 var emptyRepo = &cobra.Command{
