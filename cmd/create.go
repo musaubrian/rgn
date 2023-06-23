@@ -36,7 +36,7 @@ No README or .gitignore`,
 			log.Fatal(err)
 		}
 
-		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
@@ -55,7 +55,7 @@ It displays the URLs you can use to clone it(SSH and HTTPS)
 		if err != nil {
 			log.Fatal(err)
 		}
-		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
@@ -79,7 +79,7 @@ The README.md contains the repository name and the description
 		if err != nil {
 			log.Fatal(err)
 		}
-		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 
@@ -93,7 +93,7 @@ var readmeAndGitignore = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		custom.SuccesfullCreation(*r.Name, *r.SSHURL, *r.CloneURL)
+		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
 

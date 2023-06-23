@@ -8,6 +8,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
@@ -51,7 +52,11 @@ var mitLicense = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			custom.SuccesfullLicenseCreation(rName)
 		} else {
 			fmt.Println(cleanStr)
 		}
@@ -80,7 +85,11 @@ var apacheLicense = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			custom.SuccesfullLicenseCreation(rName)
 		} else {
 			fmt.Println(cleanStr)
 		}
@@ -123,7 +132,11 @@ rgn license bsd 2/3
 				if err != nil {
 					log.Fatal(err)
 				}
-				gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
 			} else {
 				fmt.Println(cleanStr)
 			}
@@ -143,7 +156,11 @@ rgn license bsd 2/3
 				if err != nil {
 					log.Fatal(err)
 				}
-				gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
 			} else {
 				fmt.Println(cleanStr)
 			}
@@ -189,7 +206,11 @@ rgn license bsd 2/3
 				if err != nil {
 					log.Fatal(err)
 				}
-				gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
 			} else {
 				fmt.Println(cleanStr)
 			}
@@ -209,7 +230,11 @@ rgn license bsd 2/3
 				if err != nil {
 					log.Fatal(err)
 				}
-				gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
 			} else {
 				fmt.Println(cleanStr)
 			}
@@ -239,7 +264,11 @@ var cc0License = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			custom.SuccesfullLicenseCreation(rName)
 		} else {
 			fmt.Println(cleanStr)
 		}
@@ -268,7 +297,11 @@ var mplLicense = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			custom.SuccesfullLicenseCreation(rName)
 		} else {
 			fmt.Println(cleanStr)
 		}
@@ -297,7 +330,11 @@ var lgplLicense = &cobra.Command{
 			if err != nil {
 				log.Fatal(err)
 			}
-			gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			if err != nil {
+				log.Fatal(err)
+			}
+			custom.SuccesfullLicenseCreation(rName)
 		} else {
 			fmt.Println(cleanStr)
 		}

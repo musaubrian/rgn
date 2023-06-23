@@ -15,8 +15,12 @@ func HeaderMsg(msg string) {
 	bold.Println("\n// ", msg)
 }
 
-func SuccesfullCreation(rName, sshURL, httpURL string) {
+func SuccesfullRepoCreation(rName, sshURL, httpURL string) {
 	success.Printf("// Created [%s] successfully\n", rName)
 	bold.Println("\n// Cloning URLs")
 	fmt.Printf("ssh: %s\nhttps: %s", sshURL, httpURL)
+}
+
+func SuccesfullLicenseCreation(rName string) {
+	success.Printf("// Created LICENSE in [%s]\n", rName)
 }
