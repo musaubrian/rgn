@@ -31,7 +31,7 @@ Response includes any labels available`,
 			body := b[0]
 			// only when there was more than one line
 			if len(b) > 1 {
-				body = body + "..."
+				body = body[:30] + "..."
 			}
 
 			timePassed := time.Since(*i.CreatedAt)
