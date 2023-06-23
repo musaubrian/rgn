@@ -1,61 +1,75 @@
 # RepoGen(rgn)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 RepoGen is a lightweight command-line interface (CLI) tool written in Go,
 designed to simplify the process of creating and initializing repositories on GitHub.
 
-It offers a **simpler* approach to repository creation by providing options to generate repositories:
- - Empty repostitores(**no README or .gitignore**)
- - repositories with only a .gitignore file,
- - repositories with only a README file,
- - repositories with both a README file and a .gitignore file.
+You can also see what issues are assigned to you.
+
+<details>
+<summary>Repository Generation Options</summary>
+
+- [x] Empty repositories (no README or .gitignore)
+- [x] Repositories with only a .gitignore file
+- [x] Repositories with only a README file
+- [x] Repositories with both a README file and a .gitignore file
+- [ ] LICENSE generation?
+
+</details>
+
+
 
 ## Installation
 
 To use RepoGen, you'll need to have Go installed on your system.
+
 Follow these steps to install and set up RepoGen:
 
-### From Source
-1. Clone the RepoGen repository from GitHub:
+> **Note**
+>
+> You will need to generate new personal token with repo creation permissions
+
+### a. From Source
+
+1. clone the repository
 ```bash
-git clone https://github.com/musaubrian/rgn.git
+git clone https://github.com/musaubrian/rgn
 
-#OR
-
-git clone git@github.com:musaubrian/rgn.git
-```
-3. Build the RepoGen binary:
-
-```bash
 cd rgn
-
-go build
 ```
-4.
-   a) Move the binary to a directory in your system's PATH (e.g., /usr/local/bin)
-or add the current directory to your PATH environment variable.
- OR just run the generated executable
- ```bash
- ./rgn
+2. Build it.
+```bash
+go build .
+# or
+make
 
- # Windows
+# MAKE IT GLOBALLY ACCESSIBLE
+# Manually move the binary(rgn) to the GOPATH usually HOME_DIR/go/bin
+# or 
 
- ./rgn.exe
- ```
-   b) Install it system wide using `make`
- ```bash
- make install
+make install
+```
+3. Run it
+```bash
+# If you did not install it globally
+./bin/rgn
+```
 
- rgn
- ```
-
-6. Once you've completed the installation, you can start using RepoGen right away.
-
-### Using `go install`
-1. Install the binary
+### b. Using `go install`
 ```bash
 go install github.com/musaubrian/rgn@latest
+
+#If the version installed doesn't match the current release version
+
+go install github.com/musaubrian/rgn@current_version
 ```
-2. That's it, just run the binary
+
+## Uninstalling
 ```bash
-rgn
+# If you made it globally vailable
+make uninstall
+
+# If not
+make clean
 ```
