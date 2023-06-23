@@ -14,7 +14,7 @@ You can also see what issues are assigned to you.
 - [x] Repositories with only a .gitignore file
 - [x] Repositories with only a README file
 - [x] Repositories with both a README file and a .gitignore file
-- [ ] LICENSE generation?
+- [x] LICENSE generation?
 
 </details>
 
@@ -22,13 +22,13 @@ You can also see what issues are assigned to you.
 
 ## Installation
 
-To use RepoGen, you'll need to have Go installed on your system.
-
-Follow these steps to install and set up RepoGen:
-
 > **Note**
 >
 > You will need to generate new personal token with repo creation permissions
+
+To use RepoGen, you'll need to have Go installed on your system.
+Follow these steps to install and set up RepoGen:
+
 
 ### a. From Source
 
@@ -54,13 +54,16 @@ make install
 ```bash
 # If you did not install it globally
 ./bin/rgn
+
+# If you did install it globally
+rgn
 ```
 
 ### b. Using `go install`
 ```bash
 go install github.com/musaubrian/rgn@latest
 
-#If the version installed doesn't match the current release version
+# If the version installed doesn't match the current release version
 
 go install github.com/musaubrian/rgn@current_version
 ```
