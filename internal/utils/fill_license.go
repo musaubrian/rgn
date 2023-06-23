@@ -22,10 +22,14 @@ func FillLicense(c *github.Client, ctx context.Context, l string) (string, error
 	year := fmt.Sprintf("%d", time.Now().Year())
 
 	userPattern := regexp.MustCompile("\\[fullname]")
+	altUserPattern := regexp.MustCompile("\\[name of copyright owner]")
 	yearPattern := regexp.MustCompile("\\[year]")
+	altyearPattern := regexp.MustCompile("\\[yyyy]")
 
 	cleanLicense = userPattern.ReplaceAllString(l, *u.Login)
 	cleanLicense = yearPattern.ReplaceAllString(cleanLicense, year)
+	cleanLicense = altUserPattern.ReplaceAllString(l, *u.Login)
+	cleanLicense = altyearPattern.ReplaceAllString(cleanLicense, year)
 
 	return cleanLicense, nil
 }

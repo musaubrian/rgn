@@ -47,7 +47,7 @@ var mitLicense = &cobra.Command{
 			log.Fatal(err)
 		}
 		if g {
-            rName, err := utils.ReadInput("Repository to create LICENSE for:")
+			rName, err := utils.ReadInput("Repository to create LICENSE for:")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -96,9 +96,8 @@ rgn license bsd 2/3
 - 3 to use BSD 3-Clause
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		if len(args) < 1 {
-            log.Fatal("You need to pick a version\n\nRun: rgn l bsd -h for more info")
+			log.Fatal("You need to pick a version\n\nRun: rgn l bsd -h for more info")
 		}
 		v, err := strconv.Atoi(args[0])
 		if err != nil {
@@ -149,7 +148,7 @@ rgn license bsd 2/3
 				fmt.Println(cleanStr)
 			}
 		}
-    },
+	},
 }
 
 var gplLicense = &cobra.Command{
@@ -164,7 +163,7 @@ rgn license bsd 2/3
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-            log.Fatal("You need to pick a version\n\nRun: rgn l gpl -h for more info")
+			log.Fatal("You need to pick a version\n\nRun: rgn l gpl -h for more info")
 		}
 		v, err := strconv.Atoi(args[0])
 		if err != nil {
