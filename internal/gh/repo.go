@@ -103,7 +103,7 @@ func CreateRepoWithBoth(c *github.Client, ctx context.Context) (*github.Reposito
 }
 
 func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) error {
-	commitMsg := "chore: create README"
+	commitMsg := "chore(init): create README"
 	fContent := "# " + *r.Name
 	currentTime := time.Now()
 
@@ -133,7 +133,7 @@ func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) e
 }
 
 func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository, lang string) error {
-	commitMsg := "chore: create .gitignore"
+	commitMsg := "chore(init): create .gitignore"
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
 		return custom.GetGHUserErr(err)
@@ -160,6 +160,34 @@ func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, *r.Name, ".gitignore", &fOpts)
 	if err != nil {
 		return custom.FileCreationErr(".gitignore", err)
+	}
+	return nil
+}
+
+func CreateLicense(c *github.Client, ctx context.Context, l string, rName string) error {
+	commitMsg := "chore: add LICENSE"
+	u, _, err := c.Users.Get(ctx, "")
+	if err != nil {
+		return custom.GetGHUserErr(err)
+	}
+
+	currentTime := time.Now()
+	a := github.CommitAuthor{
+		Date:  &currentTime,
+		Name:  u.Name,
+		Email: u.Email,
+		Login: u.Login,
+	}
+
+	fOpts := github.RepositoryContentFileOptions{
+		Message:   &commitMsg,
+		Content:   []byte(l),
+		Author:    &a,
+		Committer: &a,
+	}
+	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, rName, "LICENSE", &fOpts)
+	if err != nil {
+		return custom.FileCreationErr("LICENSE", err)
 	}
 	return nil
 }
