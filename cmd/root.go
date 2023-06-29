@@ -1,6 +1,3 @@
-/*
-Copyright © 2023 musaubrian
-*/
 package cmd
 
 import (
