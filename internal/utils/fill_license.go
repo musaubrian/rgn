@@ -18,7 +18,7 @@ func FillLicense(c *github.Client, ctx context.Context, l string) (string, error
 		return cleanLicense, custom.GetGHUserErr(err)
 	}
 
-	// convert yaer to string
+	// convert year to string
 	year := fmt.Sprintf("%d", time.Now().Year())
 
 	userPattern := regexp.MustCompile("\\[fullname]|\\[name of copyright owner]")
