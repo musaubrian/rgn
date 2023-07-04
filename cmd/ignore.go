@@ -19,6 +19,8 @@ You can redirect the contents to .gitignore
 `,
 	Example: `rgn ignore go
 rgn i go
+
+rgn ignore go > .gitignore
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
