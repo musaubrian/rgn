@@ -17,7 +17,7 @@ var ignoreCmd = &cobra.Command{
 	Long: `Print the contents of gitignore to stdout
 You can redirect the contents to .gitignore
 `,
-Aliases: []string{"ig"},
+	Aliases: []string{"ig"},
 	Example: `rgn ignore go
 rgn ig go
 
