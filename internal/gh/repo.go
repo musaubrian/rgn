@@ -2,6 +2,7 @@ package gh
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/google/go-github/github"
@@ -197,5 +198,12 @@ func GetGitignore(c *github.Client, ctx context.Context, lang string) (string, e
 	if err != nil {
 		return "", custom.GetGitignoreErr(err)
 	}
-	return *gitIgnore.Source, nil
+	ignoreContents := *gitIgnore.Source
+	comment := "\n# Incase the template didn't include this for some reason\n"
+	if !strings.Contains(ignoreContents, "env") {
+		ignoreContents := ignoreContents + comment + ".env"
+		return ignoreContents, nil
+	}
+
+	return ignoreContents, nil
 }
