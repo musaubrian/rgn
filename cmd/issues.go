@@ -20,20 +20,23 @@ Response includes any labels available`,
 	Aliases: []string{"i"},
 	Run: func(cmd *cobra.Command, args []string) {
 		var b []string
+		var body string
 		t := tabby.New()
 		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
 		issues, err := gh.GetIssuesAssigned(client, cmd.Context())
 		if err != nil {
 			log.Fatal(err)
 		}
-		count := 0
-		for _, i := range issues {
-			if strings.Contains(*i.Body, "\r\n") {
-				b = strings.Split(*i.Body, "\r\n")
-			}
+		for c, i := range issues {
+			if len(i.GetBody()) > 1 {
+				if strings.Contains(*i.Body, "\r\n") {
+					b = strings.Split(*i.Body, "\r\n")
+				}
 
-			b = strings.Split(*i.Body, ".")
-			body := b[0]
+				b = strings.Split(*i.Body, ".")
+				body = b[0]
+			}
+			body = "--Nothin here--"
 			// only when there was more than one line
 			if len(b) > 1 {
 				body = utils.Truncate(body, len(body)-len(body)/3)
@@ -49,11 +52,11 @@ Response includes any labels available`,
 					l = l + "..."
 				}
 
-				t.AddLine(count, *i.Repository.FullName, *i.Title, body, l, relativeTime)
-				count += 1
+				t.AddLine(c, *i.Repository.FullName, *i.Title, body, l, relativeTime)
+				c += 1
 			} else {
-				t.AddLine(count, *i.Repository.FullName, *i.Title, body, "--none--", relativeTime)
-				count += 1
+				t.AddLine(c, *i.Repository.FullName, *i.Title, body, "--none--", relativeTime)
+				c += 1
 			}
 		}
 		t.Print()
