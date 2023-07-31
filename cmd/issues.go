@@ -19,6 +19,7 @@ var issuesCmd = &cobra.Command{
 Response includes any labels available`,
 	Aliases: []string{"i"},
 	Run: func(cmd *cobra.Command, args []string) {
+		var b []string
 		t := tabby.New()
 		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
 		issues, err := gh.GetIssuesAssigned(client, cmd.Context())
@@ -27,11 +28,15 @@ Response includes any labels available`,
 		}
 		count := 0
 		for _, i := range issues {
-			b := strings.Split(*i.Body, "\r\n")
+			if strings.Contains(*i.Body, "\r\n") {
+				b = strings.Split(*i.Body, "\r\n")
+			}
+
+			b = strings.Split(*i.Body, ".")
 			body := b[0]
 			// only when there was more than one line
 			if len(b) > 1 {
-				body = body[:30] + "..."
+				body = utils.Truncate(body, len(body)-len(body)/3)
 			}
 
 			timePassed := time.Since(*i.CreatedAt)
