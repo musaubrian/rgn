@@ -11,6 +11,7 @@ import (
 )
 
 // Replace [year] and [fullname] in the License with actual values
+// (username from github and current year)
 func FillLicense(c *github.Client, ctx context.Context, l string) (string, error) {
 	var cleanLicense string
 	u, _, err := c.Users.Get(ctx, "")
@@ -21,8 +22,8 @@ func FillLicense(c *github.Client, ctx context.Context, l string) (string, error
 	// convert year to string
 	year := fmt.Sprintf("%d", time.Now().Year())
 
-	userPattern := regexp.MustCompile("\\[fullname]|\\[name of copyright owner]")
-	yearPattern := regexp.MustCompile("\\[year]|\\[yyyy]")
+	userPattern := regexp.MustCompile(`\[fullname]|\[name of copyright owner]`)
+	yearPattern := regexp.MustCompile(`\[year]|\[yyyy]`)
 
 	cleanLicense = userPattern.ReplaceAllString(l, *u.Login)
 	cleanLicense = yearPattern.ReplaceAllString(cleanLicense, year)

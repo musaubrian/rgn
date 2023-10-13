@@ -27,6 +27,7 @@ var notificationsCmd = &cobra.Command{
 		}
 		t := tabby.New()
 		t.AddHeader("\n#", "Repo", "Type", "Title")
+
 		for i, v := range r {
 			if *v.Unread {
 				title := utils.Truncate(*v.Subject.Title, 50)

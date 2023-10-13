@@ -3,67 +3,67 @@ package custom
 import "errors"
 
 func NoneExistentEnvErr() error {
-	return errors.New("Looks like you don't have a .env\nLet's fix that")
+	return errors.New("looks like you don't have a .env\nlet's fix that")
 }
 
 func EmptyEnvErr() error {
-	return errors.New("Your .env is empty\nLet's fix that")
+	return errors.New("your .env is empty\nlet's fix that")
 }
 
 func EnvCreationErr(err error) error {
-	envCreationErr := errors.New("Could not create .env\n")
+	envCreationErr := errors.New("could not create .env\n ")
 	e := errors.Join(envCreationErr, err)
 	return e
 }
 
 func ReadInputErr() error {
-	return errors.New("Could not read your input")
+	return errors.New("could not read your input")
 }
 
 func EmptyInputReadErr() error {
-	return errors.New("No input was entered")
+	return errors.New("no input was entered")
 }
 
 func GetGHUserErr(err error) error {
-	ghUserErr := errors.New("Could not get the github user\n")
+	ghUserErr := errors.New("could not get the github user\n ")
 	e := errors.Join(ghUserErr, err)
 	return e
 }
 
 func CreateRepoErr(err error) error {
-	createRepoErr := errors.New("Could not create repository.\n")
+	createRepoErr := errors.New("could not create repository.\n ")
 
 	e := errors.Join(createRepoErr, err)
 	return e
 }
 
 func FileCreationErr(f string, err error) error {
-	msg := "Could not create " + f + "\n"
+	msg := "could not create " + f + "\n "
 	fileCreationErr := errors.New(msg)
 	e := errors.Join(fileCreationErr, err)
 	return e
 }
 
 func GetGitignoreErr(err error) error {
-	getIgnoreErr := errors.New("Could not get .gitignore template\n")
+	getIgnoreErr := errors.New("could not get .gitignore template\n ")
 	e := errors.Join(getIgnoreErr, err)
 	return e
 }
 
 func GetIssuesErr(err error) error {
-	getIssuesErr := errors.New("Could not get your issues\n")
+	getIssuesErr := errors.New("could not get your issues\n ")
 	e := errors.Join(getIssuesErr, err)
 	return e
 }
 
 func DirCreationErr(err error) error {
-	dirCreationErr := errors.New("Could not create .rgn\n")
+	dirCreationErr := errors.New("could not create .rgn\n ")
 	e := errors.Join(dirCreationErr, err)
 	return e
 }
 
 func GetHomeErr(err error) error {
-	getHomeErr := errors.New("HOME DIR SHOULD EXIST\n")
+	getHomeErr := errors.New("HOME DIR SHOULD EXIST\n ")
 	e := errors.Join(getHomeErr, err)
 	return e
 }
