@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cheynewallace/tabby"
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
@@ -21,7 +21,7 @@ Response includes any labels available`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var b []string
 		var body string
-		t := tabby.New()
+		t := custom.NewCustomTabby()
 		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
 		issues, err := gh.GetIssuesAssigned(client, cmd.Context())
 		if err != nil {
