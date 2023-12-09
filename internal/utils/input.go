@@ -18,12 +18,12 @@ func ReadInput(prompt string) (string, error) {
 	s, err = rd.ReadString('\n')
 
 	if err != nil {
-		return s, custom.ReadInputErr()
+		return s, custom.Error(custom.ErrMsg["readInputErr"], err)
 	}
 
 	s = strings.TrimSuffix(s, "\n")
 	if len(s) < 1 {
-		return s, custom.EmptyInputReadErr()
+		return s, custom.Error(custom.ErrMsg["emptyInputErr"], nil)
 	}
 
 	return s, nil

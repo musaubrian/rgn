@@ -25,7 +25,7 @@ func Auth(envPath string, c context.Context) (*github.Client, error) {
 		os.Exit(1)
 	}
 	if len(envDets) != 2 {
-		log.Println(custom.EmptyEnvErr())
+		log.Println(custom.Error(custom.ErrMsg["emptyEnvErr"], nil))
 		err := utils.CreateEnv(envPath)
 		if err != nil {
 			log.Fatal(err)
