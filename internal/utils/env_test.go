@@ -6,7 +6,8 @@ import (
 )
 
 func TestReadEnv(t *testing.T) {
-	val, err := ReadEnv("../../.env")
+	envPath, _ := GetEnvLoc()
+	val, err := ReadEnv(envPath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			t.Errorf("Expected .env to exist")
@@ -18,6 +19,9 @@ func TestReadEnv(t *testing.T) {
 	}
 }
 
-func TestCreateEnv(t *testing.T) {
-	// pass
+func TestGetEnvLoc(t *testing.T) {
+	_, err := GetEnvLoc()
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
 }
