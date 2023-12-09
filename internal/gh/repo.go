@@ -15,7 +15,7 @@ import (
 func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository, error) {
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return nil, custom.Error("Could not get github user\n", err)
+		return nil, custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	// Repo name must not be empty
