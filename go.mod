@@ -3,7 +3,6 @@ module github.com/musaubrian/rgn
 go 1.20
 
 require (
-	github.com/cheynewallace/tabby v1.1.1
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/spf13/cobra v1.7.0
 	golang.org/x/oauth2 v0.8.0
