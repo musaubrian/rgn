@@ -2,68 +2,24 @@ package custom
 
 import "errors"
 
-func NoneExistentEnvErr() error {
-	return errors.New("looks like you don't have a .env\nlet's fix that")
+var ErrMsg = map[string]string{
+	"noEnvErr":        "Looks like you don't have a .env\nlet's fix that.",
+	"emptyEnvErr":     "Your .env is empty\nlet's fix that.",
+	"envCreationErr":  "Could not create `.env`.",
+	"readInputErr":    "Could not read your input.",
+	"emptyInputErr":   "No input was entered.",
+	"repoCreationErr": "Could not create repository.",
+	"getGhUserErr":    "Could not get the GitHub user.",
+	"fileCreationErr": "Could not create file",
+	"getIgnoreErr":    "Could not get .gitignore template.",
+	"issuesErr":       "Could not get your issues.",
+	"dirCreationErr":  "Could not create `.rgn`.",
+	"homeErr":         "HOME DIRECTORY SHOULD EXIST.",
+	"repoExistsErr":   "Repository already exists.",
 }
 
-func EmptyEnvErr() error {
-	return errors.New("your .env is empty\nlet's fix that")
-}
-
-func EnvCreationErr(err error) error {
-	envCreationErr := errors.New("could not create .env\n ")
-	e := errors.Join(envCreationErr, err)
-	return e
-}
-
-func ReadInputErr() error {
-	return errors.New("could not read your input")
-}
-
-func EmptyInputReadErr() error {
-	return errors.New("no input was entered")
-}
-
-func GetGHUserErr(err error) error {
-	ghUserErr := errors.New("could not get the github user\n ")
-	e := errors.Join(ghUserErr, err)
-	return e
-}
-
-func CreateRepoErr(err error) error {
-	createRepoErr := errors.New("could not create repository.\n ")
-
-	e := errors.Join(createRepoErr, err)
-	return e
-}
-
-func FileCreationErr(f string, err error) error {
-	msg := "could not create " + f + "\n "
-	fileCreationErr := errors.New(msg)
-	e := errors.Join(fileCreationErr, err)
-	return e
-}
-
-func GetGitignoreErr(err error) error {
-	getIgnoreErr := errors.New("could not get .gitignore template\n ")
-	e := errors.Join(getIgnoreErr, err)
-	return e
-}
-
-func GetIssuesErr(err error) error {
-	getIssuesErr := errors.New("could not get your issues\n ")
-	e := errors.Join(getIssuesErr, err)
-	return e
-}
-
-func DirCreationErr(err error) error {
-	dirCreationErr := errors.New("could not create .rgn\n ")
-	e := errors.Join(dirCreationErr, err)
-	return e
-}
-
-func GetHomeErr(err error) error {
-	getHomeErr := errors.New("HOME DIR SHOULD EXIST\n ")
-	e := errors.Join(getHomeErr, err)
+func Error(msg string, err error) error {
+	newErr := errors.New(msg)
+	e := errors.Join(newErr, err)
 	return e
 }

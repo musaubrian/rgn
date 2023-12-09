@@ -15,7 +15,7 @@ func GetIssuesAssigned(c *github.Client, ctx context.Context) ([]*github.Issue, 
 	}
 	i, _, err := c.Issues.List(ctx, true, &iOpts)
 	if err != nil {
-		return nil, custom.GetIssuesErr(err)
+		return nil, custom.Error(custom.ErrMsg["issuesErr"], err)
 	}
 	return i, nil
 }

@@ -16,7 +16,7 @@ func FillLicense(c *github.Client, ctx context.Context, l string) (string, error
 	var cleanLicense string
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return cleanLicense, custom.GetGHUserErr(err)
+		return cleanLicense, custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	// convert year to string

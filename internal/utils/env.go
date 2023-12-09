@@ -12,7 +12,7 @@ func ReadEnv(envPath string) ([]string, error) {
 	var ghDets []string
 	envFile, err := os.Open(envPath)
 	if err != nil {
-		return ghDets, custom.NoneExistentEnvErr()
+		return ghDets, custom.Error(custom.ErrMsg["noEnvErr"], err)
 	}
 	defer envFile.Close()
 
@@ -33,7 +33,7 @@ func CreateEnv(envPath string) error {
 	}
 	env, err := os.Create(envPath)
 	if err != nil {
-		return custom.EnvCreationErr(err)
+		return custom.Error(custom.ErrMsg["envCreationErr"], err)
 	}
 	defer env.Close()
 	fmt.Println("// Let's set you up")
@@ -62,12 +62,12 @@ func CreateEnv(envPath string) error {
 func createEnvDir() error {
 	h, err := os.UserHomeDir()
 	if err != nil {
-		return custom.GetHomeErr(err)
+		return custom.Error(custom.ErrMsg["homeErr"], nil)
 	}
 	envDir := h + string(os.PathSeparator) + ".rgn"
 	err = os.Mkdir(envDir, 0o770)
 	if err != nil {
-		return custom.DirCreationErr(err)
+		return custom.Error(custom.ErrMsg["dirCreationErr"], err)
 	}
 	return nil
 }
@@ -75,7 +75,7 @@ func createEnvDir() error {
 func GetEnvLoc() (string, error) {
 	h, err := os.UserHomeDir()
 	if err != nil {
-		return "", custom.GetHomeErr(err)
+		return "", custom.Error(custom.ErrMsg["homeErr"], nil)
 	}
 	envLoc := h + string(os.PathSeparator) + ".rgn" + string(os.PathSeparator) + ".env"
 	return envLoc, nil

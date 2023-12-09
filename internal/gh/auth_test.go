@@ -3,10 +3,12 @@ package gh
 import (
 	"context"
 	"testing"
+
+	"github.com/musaubrian/rgn/internal/utils"
 )
 
 func TestCorrectDets(t *testing.T) {
-	ePath := "../../.env"
+	ePath, _ := utils.GetEnvLoc()
 	ctx := context.Background()
 	_, err := Auth(ePath, ctx)
 	if err != nil {

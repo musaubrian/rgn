@@ -3,15 +3,15 @@ package utils
 import "unicode"
 
 func Truncate(text string, maxLen int) string {
-	lastSpaceIx := maxLen
+	lastSpaceIdx := maxLen
 	len := 0
 	for i, r := range text {
 		if unicode.IsSpace(r) {
-			lastSpaceIx = i
+			lastSpaceIdx = i
 		}
 		len++
 		if len > maxLen {
-			return text[:lastSpaceIx] + "..."
+			return text[:lastSpaceIdx] + "..."
 		}
 	}
 	// If here, string is shorter or equal to maxLen

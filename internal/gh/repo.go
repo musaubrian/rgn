@@ -15,7 +15,7 @@ import (
 func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository, error) {
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return nil, custom.GetGHUserErr(err)
+		return nil, custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	// Repo name must not be empty
@@ -42,7 +42,7 @@ func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository,
 
 	repo, _, err := c.Repositories.Create(ctx, "", &rOpts)
 	if err != nil {
-		return repo, custom.CreateRepoErr(err)
+		return repo, custom.Error(custom.ErrMsg["repoExistsErr"], err)
 	}
 	return repo, nil
 }
@@ -110,7 +110,7 @@ func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) e
 
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return custom.GetGHUserErr(err)
+		return custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	a := github.CommitAuthor{
@@ -128,7 +128,8 @@ func CreateReadme(c *github.Client, ctx context.Context, r *github.Repository) e
 	}
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, *r.Name, "README.md", &fOpts)
 	if err != nil {
-		return custom.FileCreationErr("README.md", err)
+		msg := custom.ErrMsg["fileCreationErr"] + "README.md"
+		return custom.Error(msg, err)
 	}
 	return nil
 }
@@ -137,7 +138,7 @@ func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository
 	commitMsg := "chore(init): create .gitignore"
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return custom.GetGHUserErr(err)
+		return custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 	gitIgnoreContent, err := GetGitignore(c, ctx, lang)
 	if err != nil {
@@ -160,7 +161,8 @@ func CreateGitignore(c *github.Client, ctx context.Context, r *github.Repository
 	}
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, *r.Name, ".gitignore", &fOpts)
 	if err != nil {
-		return custom.FileCreationErr(".gitignore", err)
+		msg := custom.ErrMsg["fileCreationErr"] + ".gitignore"
+		return custom.Error(msg, err)
 	}
 	return nil
 }
@@ -169,7 +171,7 @@ func CreateLicense(c *github.Client, ctx context.Context, l string, rName string
 	commitMsg := "chore: add LICENSE"
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
-		return custom.GetGHUserErr(err)
+		return custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	currentTime := time.Now()
@@ -188,7 +190,8 @@ func CreateLicense(c *github.Client, ctx context.Context, l string, rName string
 	}
 	_, _, err = c.Repositories.CreateFile(ctx, *a.Login, rName, "LICENSE", &fOpts)
 	if err != nil {
-		return custom.FileCreationErr("LICENSE", err)
+		msg := custom.ErrMsg["fileCreationErr"] + "LICENSE"
+		return custom.Error(msg, err)
 	}
 	return nil
 }
@@ -196,7 +199,7 @@ func CreateLicense(c *github.Client, ctx context.Context, l string, rName string
 func GetGitignore(c *github.Client, ctx context.Context, lang string) (string, error) {
 	gitIgnore, _, err := c.Gitignores.Get(ctx, lang)
 	if err != nil {
-		return "", custom.GetGitignoreErr(err)
+		return "", custom.Error(custom.ErrMsg["getIgnoreErr"], err)
 	}
 	ignoreContents := *gitIgnore.Source
 	comment := "\n# Incase the template didn't include this for some reason\n"
