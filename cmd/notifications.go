@@ -3,7 +3,7 @@ package cmd
 import (
 	"log"
 
-	"github.com/cheynewallace/tabby"
+	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
@@ -25,12 +25,12 @@ var notificationsCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		t := tabby.New()
+		t := custom.NewTabby()
 		t.AddHeader("\n#", "Repo", "Type", "Title")
 
 		for i, v := range r {
 			if *v.Unread {
-				title := utils.Truncate(*v.Subject.Title, 50)
+				title := utils.Truncate(*v.Subject.Title, 25)
 				t.AddLine(i, *v.Repository.FullName, *v.Subject.Type, title)
 			}
 		}
