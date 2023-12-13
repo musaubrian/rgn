@@ -30,7 +30,7 @@ var notificationsCmd = &cobra.Command{
 
 		for i, v := range r {
 			if *v.Unread {
-				title := utils.Truncate(*v.Subject.Title, 50)
+				title := utils.Truncate(*v.Subject.Title, 25)
 				t.AddLine(i, *v.Repository.FullName, *v.Subject.Type, title)
 			}
 		}
