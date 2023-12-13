@@ -21,7 +21,7 @@ Response includes any labels available`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var b []string
 		var body string
-		t := custom.NewCustomTabby()
+		t := custom.NewTabby()
 		t.AddHeader("\nNO.", "REPO", "TITLE", "BODY", "LABELS", "CREATED_AT")
 		issues, err := gh.GetIssuesAssigned(client, cmd.Context())
 		if err != nil {

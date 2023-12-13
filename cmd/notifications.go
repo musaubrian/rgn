@@ -25,7 +25,7 @@ var notificationsCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		t := custom.NewCustomTabby()
+		t := custom.NewTabby()
 		t.AddHeader("\n#", "Repo", "Type", "Title")
 
 		for i, v := range r {
