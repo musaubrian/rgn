@@ -2,6 +2,7 @@ package gh
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/go-github/github"
 )
@@ -18,4 +19,9 @@ func GetUnreadNotifications(c *github.Client, ctx context.Context) ([]*github.No
 
 	res, _, err := c.Activity.ListNotifications(ctx, &opts)
 	return res, err
+}
+
+func MarkNotificationsRead(c *github.Client, ctx context.Context) error {
+	_, err := c.Activity.MarkNotificationsRead(ctx, time.Now())
+	return err
 }
