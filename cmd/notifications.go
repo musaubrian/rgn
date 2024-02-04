@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/musaubrian/rgn/custom"
@@ -11,14 +12,8 @@ import (
 
 // notificationsCmd represents the notifications command
 var notificationsCmd = &cobra.Command{
-	Use:   "notification",
-	Short: "Get a brief overview of your unread notifications",
-	// 	Long: `A longer description that spans multiple lines and likely contains examples
-	// and usage of using your command. For example:
-	//
-	// Cobra is a CLI library for Go that empowers applications.
-	// This application is a tool to generate the needed files
-	// to quickly create a Cobra application.`,
+	Use:     "notification",
+	Short:   "Get a brief overview of your unread notifications",
 	Aliases: []string{"n"},
 	Run: func(cmd *cobra.Command, args []string) {
 		r, err := gh.GetUnreadNotifications(client, cmd.Context())
@@ -39,8 +34,21 @@ var notificationsCmd = &cobra.Command{
 	},
 }
 
+var readnotifications = &cobra.Command{
+	Use:     "read",
+	Short:   "Mark notifications read",
+	Aliases: []string{"r"},
+	Run: func(cmd *cobra.Command, args []string) {
+		err := gh.MarkNotificationsRead(client, cmd.Context())
+		if err != nil {
+			log.Fatal("Could not mark notifications as read")
+		}
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(notificationsCmd)
+	notificationsCmd.AddCommand(readnotifications)
 
 	// Here you will define your flags and configuration settings.
 
