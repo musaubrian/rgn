@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
@@ -12,8 +14,14 @@ import (
 // notificationsCmd represents the notifications command
 var notificationsCmd = &cobra.Command{
 	Use:     "notification",
-	Short:   "Get a brief overview of your unread notifications",
+	Short:   "View and manage your notifications(mark read)",
 	Aliases: []string{"n"},
+}
+
+var listNotifications = &cobra.Command{
+	Use:     "list",
+	Short:   "List all unread notifications",
+	Aliases: []string{"l"},
 	Run: func(cmd *cobra.Command, args []string) {
 		r, err := gh.GetUnreadNotifications(client, cmd.Context())
 		if err != nil {
@@ -33,7 +41,7 @@ var notificationsCmd = &cobra.Command{
 	},
 }
 
-var readnotifications = &cobra.Command{
+var readNotifications = &cobra.Command{
 	Use:     "read",
 	Short:   "Mark notifications read",
 	Aliases: []string{"r"},
@@ -42,12 +50,16 @@ var readnotifications = &cobra.Command{
 		if err != nil {
 			log.Fatal("Could not mark notifications as read")
 		}
+
+		fmt.Printf("Marked notifications upto today(%s) as read", time.Now().Format(time.Stamp))
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(notificationsCmd)
-	notificationsCmd.AddCommand(readnotifications)
+	notificationsCmd.AddCommand(readNotifications)
+	notificationsCmd.AddCommand(listNotifications)
 
 	// Here you will define your flags and configuration settings.
 
