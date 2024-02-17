@@ -88,7 +88,7 @@ var readmeAndGitignore = &cobra.Command{
 		custom.HeaderMsg("Creating repo with README & .gitignore")
 		r, err := gh.CreateRepoWithBoth(client, cmd.Context())
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
