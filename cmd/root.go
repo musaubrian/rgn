@@ -47,7 +47,7 @@ func Execute() {
 	if err := gh.Ping(client, rootCmd.Context()); err != nil {
 		if strings.Contains(err.Error(), "401") {
 			custom.HeaderMsg("Invalid token")
-			err := utils.UpdateEnv(env)
+			err := utils.UpdateToken(env)
 			if err != nil {
 				log.Println(err)
 			}

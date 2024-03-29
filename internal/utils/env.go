@@ -2,8 +2,8 @@ package utils
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -53,7 +53,7 @@ func CreateEnv(envPath string) error {
 	return nil
 }
 
-func UpdateEnv(envPath string) error {
+func UpdateToken(envPath string) error {
 	dets, err := ReadEnv(envPath)
 	if err != nil {
 		return err
@@ -62,12 +62,12 @@ func UpdateEnv(envPath string) error {
 	username := strings.Split(dets[0], "=")[1]
 	token, err := ReadInput("New token:")
 	if token == "" {
-		log.Fatal("Empty token, Ignoring")
+		return errors.New("Empty token, Ignoring...")
 	}
 	if err != nil {
 		return err
 	}
-	f, err := os.OpenFile(envPath, os.O_WRONLY|os.O_TRUNC, 0660)
+	f, err := os.OpenFile(envPath, os.O_WRONLY|os.O_TRUNC, 0666)
 	defer f.Close()
 	if err != nil {
 		return err
