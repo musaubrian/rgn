@@ -3,7 +3,9 @@ package utils
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"strings"
 
 	"github.com/musaubrian/rgn/custom"
 )
@@ -25,8 +27,6 @@ func ReadEnv(envPath string) ([]string, error) {
 }
 
 func CreateEnv(envPath string) error {
-	var envDets []string
-
 	err := createEnvDir()
 	if err != nil {
 		return err
@@ -37,24 +37,43 @@ func CreateEnv(envPath string) error {
 	}
 	defer env.Close()
 	fmt.Println("// Let's set you up")
-	uName, err := ReadInput("Your Github username:")
+	username, err := ReadInput("Your Github username:")
 	if err != nil {
 		return err
 	}
-	uName = "username=" + uName
-	envDets = append(envDets, uName)
 	token, err := ReadInput("Your Token(PAT):")
 	if err != nil {
 		return err
 	}
-	token = "token=" + token
 
-	envDets = append(envDets, token)
+	env.WriteString(fmt.Sprintf("username=%s\ntoken=%s\n", username, token))
 
-	for _, v := range envDets {
-		env.WriteString(v + "\n")
-	}
 	fmt.Println("// All set, re-run to access the commands")
+
+	return nil
+}
+
+func UpdateEnv(envPath string) error {
+	dets, err := ReadEnv(envPath)
+	if err != nil {
+		return err
+	}
+
+	username := strings.Split(dets[0], "=")[1]
+	token, err := ReadInput("New token:")
+	if token == "" {
+		log.Fatal("Empty token, Ignoring")
+	}
+	if err != nil {
+		return err
+	}
+	f, err := os.OpenFile(envPath, os.O_WRONLY|os.O_TRUNC, 0660)
+	defer f.Close()
+	if err != nil {
+		return err
+	}
+	p := fmt.Sprintf("username=%s\ntoken=%s\n", username, token)
+	f.WriteString(p)
 
 	return nil
 }
