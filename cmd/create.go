@@ -67,7 +67,6 @@ The README.md contains the repository name and the description
 # Repository name
 > Repository description
 -------------------------
-
 `,
 	Aliases: []string{"r"},
 	Run: func(cmd *cobra.Command, args []string) {
