@@ -37,11 +37,11 @@ func CreateEnv(envPath string) error {
 	}
 	defer env.Close()
 	fmt.Println("// Let's set you up")
-	username, err := ReadInput("Your Github username:")
+	username, err := ReadInput("Your Github username")
 	if err != nil {
 		return err
 	}
-	token, err := ReadInput("Your Token(PAT):")
+	token, err := ReadInput("Your Token(PAT)")
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func UpdateToken(envPath string) error {
 	}
 
 	username := strings.Split(dets[0], "=")[1]
-	token, err := ReadInput("New token:")
+	token, err := ReadInput("New token")
 	if token == "" {
 		return errors.New("Empty token, Ignoring...")
 	}
