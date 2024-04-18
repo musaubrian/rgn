@@ -32,7 +32,6 @@ No README or .gitignore`,
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		custom.SuccesfullRepoCreation(*r.Name, *r.SSHURL, *r.CloneURL)
 	},
 }
