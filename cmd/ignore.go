@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/huh/spinner"
 	"github.com/musaubrian/rgn/internal/gh"
+	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -18,24 +21,49 @@ var ignoreCmd = &cobra.Command{
 You can redirect the contents to .gitignore
 `,
 	Aliases: []string{"ig"},
-	Example: `rgn ignore go
-rgn ig go
-
-rgn ignore go > .gitignore
-`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			log.Fatal("You did not include a language\nRun rgn ignore -h")
-		} else if len(args) >= 2 {
-			log.Fatal("Too many arguments\nRun rgn ignore -h")
+		var lang string
+
+		opts := func(langs []string) []huh.Option[string] {
+			var huhOpts []huh.Option[string]
+			for _, v := range langs {
+				huhOpts = append(huhOpts, huh.Option[string]{
+					Key:   v,
+					Value: v})
+			}
+			return huhOpts
 		}
-		lang := args[0]
-		lang = cases.Title(language.English, cases.NoLower).String(lang)
-		ignoreContents, err := gh.QuickIgnore(client, cmd.Context(), lang)
+
+		err := huh.
+			NewSelect[string]().
+			Title("Language to generate `.gitignore` for").
+			Options(opts(utils.CommonLangs())...).
+			Value(&lang).
+			Run()
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(ignoreContents)
+
+		if lang == "Custom" {
+			customLang, err := utils.ReadInput("Your Language")
+			if err != nil {
+				log.Fatal(err)
+			}
+			lang = cases.Title(language.English, cases.NoLower).String(customLang)
+		}
+
+		ignore := func() {
+			ignoreContents, err := gh.QuickIgnore(client, cmd.Context(), lang)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(ignoreContents)
+		}
+		err = spinner.New().Title(fmt.Sprintf("Getting %s's `.gitignore`", lang)).Action(ignore).Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	},
 }
 

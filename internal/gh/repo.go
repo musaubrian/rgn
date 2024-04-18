@@ -2,9 +2,11 @@ package gh
 
 import (
 	"context"
+	"log"
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/huh"
 	"github.com/google/go-github/github"
 	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/utils"
@@ -13,23 +15,29 @@ import (
 )
 
 func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository, error) {
+	var makePrivate bool
+
 	u, _, err := c.Users.Get(ctx, "")
 	if err != nil {
 		return nil, custom.Error(custom.ErrMsg["getGhUserErr"], err)
 	}
 
 	// Repo name must not be empty
-	rName, err := utils.ReadInput("Repo name:")
+	rName, err := utils.ReadInput("Repo name")
 	if err != nil {
 		return nil, err
 	}
-	rDesc, _ := utils.ReadInput("Repo description:")
-	visibility, _ := utils.ReadInput("Make private [Y]/n:")
-	private := true
-	defBranch := "main"
-	if visibility == "n" {
-		private = false
+	rDesc, _ := utils.ReadInput("Repo description")
+
+	err = huh.NewConfirm().
+		Title("Make private").
+		Value(&makePrivate).
+		Run()
+
+	if err != nil {
+		log.Fatal(err)
 	}
+	defBranch := "main"
 
 	rOpts := github.Repository{
 		Owner:         &github.User{Login: github.String(*u.Name)},
@@ -37,7 +45,7 @@ func CreateEmptyRepo(c *github.Client, ctx context.Context) (*github.Repository,
 		Description:   &rDesc,
 		DefaultBranch: &defBranch,
 		MasterBranch:  &defBranch,
-		Private:       &private,
+		Private:       &makePrivate,
 	}
 
 	repo, _, err := c.Repositories.Create(ctx, "", &rOpts)
@@ -60,17 +68,39 @@ func CreateRepoWithReadme(c *github.Client, ctx context.Context) (*github.Reposi
 }
 
 func CreateRepoWithGitignore(c *github.Client, ctx context.Context) (*github.Repository, error) {
+	var lang string
 	r, err := CreateEmptyRepo(c, ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	lang, err := utils.ReadInput("Language to setup gitignore for:")
-	if err != nil {
-		return nil, err
+	opts := func(langs []string) []huh.Option[string] {
+		var huhOpts []huh.Option[string]
+		for _, v := range langs {
+			huhOpts = append(huhOpts, huh.Option[string]{
+				Key:   v,
+				Value: v})
+		}
+		return huhOpts
 	}
-	// Capitalize
-	lang = cases.Title(language.English, cases.NoLower).String(lang)
+
+	err = huh.
+		NewSelect[string]().
+		Title("Language to generate `.gitignore` for").
+		Options(opts(utils.CommonLangs())...).
+		Value(&lang).
+		Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if lang == "Custom" {
+		customLang, err := utils.ReadInput("Your Language")
+		if err != nil {
+			log.Fatal(err)
+		}
+		lang = cases.Title(language.English, cases.NoLower).String(customLang)
+	}
 
 	err = CreateGitignore(c, ctx, r, lang)
 	if err != nil {
@@ -89,7 +119,7 @@ func CreateRepoWithBoth(c *github.Client, ctx context.Context) (*github.Reposito
 		return nil, err
 	}
 
-	lang, err := utils.ReadInput("Language to setup gitignore for:")
+	lang, err := utils.ReadInput("Language to setup gitignore for")
 	if err != nil {
 		return nil, err
 	}

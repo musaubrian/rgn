@@ -3,8 +3,9 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"strconv"
 
+	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/huh/spinner"
 	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/musaubrian/rgn/internal/utils"
@@ -20,10 +21,18 @@ var licenseCmd = &cobra.Command{
 LICENSE can either be added to the repo that is already on github
 or the contents of the LICENSE can be printed out in the stdout locally
 
-To learn more about which LICENSE to choose, visit 
+To learn more about which LICENSE to choose, visit
 https://choosealicense.com/licenses/
     `,
 	Aliases: []string{"l"},
+	Example: `
+# Redirect the results to a file
+rgn license <your license> > LICENSE
+
+	or
+# Creates it directly in your repo
+rgn license <your license> -g
+	`,
 }
 
 var mitLicense = &cobra.Command{
@@ -35,27 +44,34 @@ var mitLicense = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		l, err := gh.GetMIT(client, cmd.Context())
-		if err != nil {
-			log.Fatal(err)
-		}
-		str := *l.Body
-		cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if g {
-			rName, err := utils.ReadInput("Repository to create LICENSE for:")
+		mit := func() {
+			l, err := gh.GetMIT(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			str := *l.Body
+			cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
 			if err != nil {
 				log.Fatal(err)
 			}
-			custom.SuccesfullLicenseCreation(rName)
-		} else {
-			fmt.Println(cleanStr)
+			if g {
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
+			} else {
+				fmt.Println(cleanStr)
+			}
+		}
+
+		err = spinner.New().Title("Creating License").Action(mit).Run()
+		if err != nil {
+			log.Fatal(err)
 		}
 	},
 }
@@ -68,27 +84,34 @@ var apacheLicense = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		l, err := gh.GetApache(client, cmd.Context())
-		if err != nil {
-			log.Fatal(err)
-		}
-		str := *l.Body
-		cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if g {
-			rName, err := utils.ReadInput("Repository to create LICENSE for:")
+		apache := func() {
+			l, err := gh.GetApache(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			str := *l.Body
+			cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
 			if err != nil {
 				log.Fatal(err)
 			}
-			custom.SuccesfullLicenseCreation(rName)
-		} else {
-			fmt.Println(cleanStr)
+			if g {
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
+			} else {
+				fmt.Println(cleanStr)
+			}
+		}
+
+		err = spinner.New().Title("Creating License").Action(apache).Run()
+		if err != nil {
+			log.Fatal(err)
 		}
 	},
 }
@@ -96,25 +119,34 @@ var apacheLicense = &cobra.Command{
 var bsdLicense = &cobra.Command{
 	Use:   "bsd",
 	Short: "Add BSD License (v2 or v3)",
-	Long: `Create a new BSD License
-rgn license bsd 2/3
-- 2 to use BSD 2-Clause
-- 3 to use BSD 3-Clause
-`,
+	// Long:  `Create a new BSD License`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			log.Fatal("You need to pick a version\n\nRun: rgn l bsd -h for more info")
+		var version int
+
+		opts := func() []huh.Option[int] {
+			var huhOpts []huh.Option[int]
+			versions := map[string]int{
+				"bsd-2-clause": 2,
+				"bsd-3-clause": 3,
+			}
+			for k, v := range versions {
+				huhOpts = append(huhOpts, huh.Option[int]{
+					Key:   k,
+					Value: v})
+			}
+			return huhOpts
 		}
-		v, err := strconv.Atoi(args[0])
+		err := huh.NewSelect[int]().Title("Pick version").Options(opts()...).Value(&version).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		g, err := licenseCmd.Flags().GetBool("github")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if v == 2 {
+		bsd2 := func() {
 			l, err := gh.GetBSD2(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
@@ -125,7 +157,7 @@ rgn license bsd 2/3
 				log.Fatal(err)
 			}
 			if g {
-				rName, err := utils.ReadInput("Repository to create LICENSE for:")
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -137,8 +169,9 @@ rgn license bsd 2/3
 			} else {
 				fmt.Println(cleanStr)
 			}
-		} else if v == 3 {
+		}
 
+		bsd3 := func() {
 			l, err := gh.GetBSD3(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
@@ -149,7 +182,7 @@ rgn license bsd 2/3
 				log.Fatal(err)
 			}
 			if g {
-				rName, err := utils.ReadInput("Repository to create LICENSE for:")
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -160,6 +193,19 @@ rgn license bsd 2/3
 				custom.SuccesfullLicenseCreation(rName)
 			} else {
 				fmt.Println(cleanStr)
+			}
+
+		}
+
+		if version == 2 {
+			err := spinner.New().Title("Creating License").Action(bsd2).Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else if version == 3 {
+			err := spinner.New().Title("Creating License").Action(bsd3).Run()
+			if err != nil {
+				log.Fatal(err)
 			}
 		}
 	},
@@ -176,19 +222,31 @@ rgn license bsd 2/3
 - 3 to use GNU General Public License v3.0
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			log.Fatal("You need to pick a version\n\nRun: rgn l gpl -h for more info")
+		var version int
+
+		opts := func() []huh.Option[int] {
+			var huhOpts []huh.Option[int]
+			versions := map[string]int{
+				"GNU General Public License v2.0": 2,
+				"GNU General Public License v3.0": 3,
+			}
+			for k, v := range versions {
+				huhOpts = append(huhOpts, huh.Option[int]{
+					Key:   k,
+					Value: v})
+			}
+			return huhOpts
 		}
-		v, err := strconv.Atoi(args[0])
-		if err != nil {
-			log.Fatal(err)
-		}
-		g, err := licenseCmd.Flags().GetBool("github")
+		err := huh.NewSelect[int]().Title("Pick version").Options(opts()...).Value(&version).Run()
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if v == 2 {
+		g, err := licenseCmd.Flags().GetBool("github")
+		if err != nil {
+			log.Fatal(err)
+		}
+		gpl2 := func() {
 			l, err := gh.GetGPL2(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
@@ -199,7 +257,7 @@ rgn license bsd 2/3
 				log.Fatal(err)
 			}
 			if g {
-				rName, err := utils.ReadInput("Repository to create LICENSE for:")
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -211,8 +269,9 @@ rgn license bsd 2/3
 			} else {
 				fmt.Println(cleanStr)
 			}
-		} else if v == 3 {
+		}
 
+		gpl3 := func() {
 			l, err := gh.GetGPL3(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
@@ -223,7 +282,7 @@ rgn license bsd 2/3
 				log.Fatal(err)
 			}
 			if g {
-				rName, err := utils.ReadInput("Repository to create LICENSE for:")
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -236,39 +295,60 @@ rgn license bsd 2/3
 				fmt.Println(cleanStr)
 			}
 		}
+
+		if version == 2 {
+			err := spinner.New().Title("Creating license").Action(gpl2).Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		} else if version == 3 {
+			err := spinner.New().Title("Creating license").Action(gpl3).Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 	},
 }
 
 var cc0License = &cobra.Command{
 	Use:   "cc",
-	Short: "Add Creative COmmons Zero v1.0 Universal",
+	Short: "Add Creative Commons Zero v1.0 Universal",
 	Run: func(cmd *cobra.Command, args []string) {
 		g, err := licenseCmd.Flags().GetBool("github")
 		if err != nil {
 			log.Fatal(err)
 		}
-		l, err := gh.GetCC0(client, cmd.Context())
-		if err != nil {
-			log.Fatal(err)
-		}
-		str := *l.Body
-		cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if g {
-			rName, err := utils.ReadInput("Repository to create LICENSE for:")
+		cc := func() {
+			l, err := gh.GetCC0(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			str := *l.Body
+			cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
 			if err != nil {
 				log.Fatal(err)
 			}
-			custom.SuccesfullLicenseCreation(rName)
-		} else {
-			fmt.Println(cleanStr)
+			if g {
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
+			} else {
+				fmt.Println(cleanStr)
+			}
 		}
+
+		err = spinner.New().Title("Creating License").Action(cc).Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	},
 }
 
@@ -280,28 +360,35 @@ var mplLicense = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		l, err := gh.GetMPL(client, cmd.Context())
-		if err != nil {
-			log.Fatal(err)
-		}
-		str := *l.Body
-		cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if g {
-			rName, err := utils.ReadInput("Repository to create LICENSE for:")
+		mpl := func() {
+			l, err := gh.GetMPL(client, cmd.Context())
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+			str := *l.Body
+			cleanStr, err := utils.FillLicense(client, cmd.Context(), str)
 			if err != nil {
 				log.Fatal(err)
 			}
-			custom.SuccesfullLicenseCreation(rName)
-		} else {
-			fmt.Println(cleanStr)
+			if g {
+				rName, err := utils.ReadInput("Repository to create LICENSE for")
+				if err != nil {
+					log.Fatal(err)
+				}
+				err = gh.CreateLicense(client, cmd.Context(), cleanStr, rName)
+				if err != nil {
+					log.Fatal(err)
+				}
+				custom.SuccesfullLicenseCreation(rName)
+			} else {
+				fmt.Println(cleanStr)
+			}
 		}
+		err = spinner.New().Title("Creating license").Action(mpl).Run()
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	},
 }
 
@@ -323,7 +410,7 @@ var lgplLicense = &cobra.Command{
 			log.Fatal(err)
 		}
 		if g {
-			rName, err := utils.ReadInput("Repository to create LICENSE for:")
+			rName, err := utils.ReadInput("Repository to create LICENSE for")
 			if err != nil {
 				log.Fatal(err)
 			}

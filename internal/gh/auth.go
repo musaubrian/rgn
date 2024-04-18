@@ -24,7 +24,6 @@ func Auth(envPath string, c context.Context) (*github.Client, error) {
 		}
 		os.Exit(1)
 	}
-
 	if len(envDets) != 2 {
 		log.Println(custom.Error(custom.ErrMsg["emptyEnvErr"], nil))
 		err := utils.CreateEnv(envPath)
@@ -32,8 +31,8 @@ func Auth(envPath string, c context.Context) (*github.Client, error) {
 			log.Fatal(err)
 		}
 		os.Exit(1)
-	}
 
+	}
 	tkn = strings.Split(envDets[1], "=")
 
 	ts := oauth2.StaticTokenSource(

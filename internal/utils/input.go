@@ -1,29 +1,28 @@
 package utils
 
 import (
-	"bufio"
-	"fmt"
-	"os"
-	"strings"
+	"errors"
 
-	"github.com/musaubrian/rgn/custom"
+	"github.com/charmbracelet/huh"
 )
+
+func notEmpty(s string) error {
+	if s == "" {
+		return errors.New("Empty values are not permmitted")
+	}
+	return nil
+}
 
 func ReadInput(prompt string) (string, error) {
 	var s string
-	var err error
-
-	rd := bufio.NewReader(os.Stdin)
-	fmt.Printf("%s ", prompt)
-	s, err = rd.ReadString('\n')
+	err := huh.NewInput().
+		Title(prompt).
+		Value(&s).
+		Validate(notEmpty).
+		Run()
 
 	if err != nil {
-		return s, custom.Error(custom.ErrMsg["readInputErr"], err)
-	}
-
-	s = strings.TrimSuffix(s, "\n")
-	if len(s) < 1 {
-		return s, custom.Error(custom.ErrMsg["emptyInputErr"], nil)
+		return s, err
 	}
 
 	return s, nil

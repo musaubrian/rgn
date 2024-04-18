@@ -63,7 +63,7 @@ func GetGPL2(c *github.Client, ctx context.Context) (*github.License, error) {
 }
 
 func GetGPL3(c *github.Client, ctx context.Context) (*github.License, error) {
-	l, _, err := c.Licenses.Get(ctx, "gpl-30")
+	l, _, err := c.Licenses.Get(ctx, "gpl-3.0")
 	if err != nil {
 		return l, err
 	}
