@@ -4,10 +4,8 @@ import (
 	"context"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/google/go-github/github"
-	"github.com/musaubrian/rgn/custom"
 	"github.com/musaubrian/rgn/internal/gh"
 	"github.com/musaubrian/rgn/internal/utils"
 	"github.com/spf13/cobra"
@@ -33,6 +31,7 @@ It also provides a central point to see issues assigned to you
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	var err error
+
 	ctx := context.Background()
 	rootCmd.SetContext(ctx)
 	env, err := utils.GetEnvLoc()
@@ -44,21 +43,6 @@ func Execute() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := gh.Ping(client, rootCmd.Context()); err != nil {
-		if strings.Contains(err.Error(), "401") {
-			custom.HeaderMsg("Invalid token")
-			err := utils.UpdateToken(env)
-			if err != nil {
-				log.Println(err)
-			}
-			// Re-run auth after updating token
-			client, err = gh.Auth(env, rootCmd.Context())
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-	}
-
 	err = rootCmd.Execute()
 	if err != nil {
 		log.Fatal(err)
