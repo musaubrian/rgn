@@ -19,7 +19,6 @@ You can also see what issues are assigned to you.
 </details>
 
 
-
 ## Installation
 
 > **Note**
@@ -46,7 +45,7 @@ make
 
 # MAKE IT GLOBALLY ACCESSIBLE
 # Manually move the binary(rgn) to the GOPATH usually HOME_DIR/go/bin
-# or 
+# or
 
 make install
 ```
@@ -67,6 +66,11 @@ go install github.com/musaubrian/rgn@latest
 
 go install github.com/musaubrian/rgn@current_version
 ```
+
+### c. From releases
+Download the archive and extract it.
+
+That's pretty much it
 
 ## Uninstalling
 ```bash
