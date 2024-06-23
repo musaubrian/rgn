@@ -27,7 +27,11 @@ Update your token when it expires`,
 			log.Fatal(err)
 		}
 		ping := func() {
-			if err := gh.Ping(client, rootCmd.Context()); err != nil {
+			updatedClient, err := gh.Auth(env, rootCmd.Context())
+			if err != nil {
+				log.Fatal(err)
+			}
+			if err := gh.Ping(updatedClient, rootCmd.Context()); err != nil {
 				if strings.Contains(err.Error(), "401") {
 					custom.HeaderMsg("Invalid token")
 					log.Fatal(err)
