@@ -1,6 +1,6 @@
 module github.com/musaubrian/rgn
 
-go 1.20
+go 1.23.0
 
 require (
 	github.com/charmbracelet/huh v0.3.0
@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.16.0
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/spf13/cobra v1.8.0
-	golang.org/x/oauth2 v0.19.0
+	golang.org/x/oauth2 v0.27.0
 	golang.org/x/text v0.14.0
 )
 
